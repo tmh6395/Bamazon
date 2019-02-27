@@ -14,22 +14,22 @@ CREATE TABLE products (
 );
 
 INSERT INTO products (product_name, product_description, department_name, price, stock_quantity)
-VALUES ('Boombox', 'Broken Left-Half', 'Electronics', 4.49, 18);
+VALUES ('Boombox', 'Broken left-half', 'Electronics', 4.49, 18);
 
 INSERT INTO products (product_name, product_description, department_name, price, stock_quantity)
-VALUES ('Cotton Swabs', 'Slightly Used', 'Personal Care', 1.24, 48);
+VALUES ('Cotton Swabs', 'Slightly used', 'Personal Care', 1.24, 48);
 
 INSERT INTO products (product_name, product_description, department_name, price, stock_quantity)
-VALUES ('Lawn Chair', 'Made with actual grass', 'Outdoor Furniture', 24.99, 27);
+VALUES ('Lawn Chair', 'Made with Actual Grass', 'Outdoor Furniture', 24.99, 27);
 
 INSERT INTO products (product_name, product_description, department_name, price, stock_quantity)
-VALUES ('Stuffed Polar Bear', 'Brown variation', 'Toys', 9.99, 13);
+VALUES ('Stuffed Polar Bear', 'Brown Variation', 'Toys', 9.99, 13);
 
 INSERT INTO products (product_name, product_description, department_name, price, stock_quantity)
 VALUES ('Lip Balm', 'Salt-based', 'Personal Care', 2.49, 30);
 
 INSERT INTO products (product_name, product_description, department_name, price, stock_quantity)
-VALUES ('Bath Bomb', 'Military-Grade', 'Personal Care', 6.50, 20);
+VALUES ('Bath Bomb', 'Military-grade', 'Personal Care', 6.50, 20);
 
 INSERT INTO products (product_name, product_description, department_name, price, stock_quantity)
 VALUES ('Oil Paint', 'Water-based', 'Arts and Crafts', 3.00, 40);
