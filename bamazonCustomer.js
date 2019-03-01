@@ -14,6 +14,8 @@ let connection = mysql.createConnection({
 
 connection.connect(function (err) {
 	if (err) throw err;
+	console.log("Hello, and welcome to Bamazon!");
+	console.log("Take a look at our selection!")
 	// run the start function after the connection is made to prompt the user
 	displayItems();
 });
@@ -45,10 +47,10 @@ function displayItems() {
 			])
 			.then(function (answer) {
 
-				console.log(answer);
+				// Call a function that checks for quantity violation
 				quantityCheck(answer);
 			})
-	}) // connection.query endpoint
+	})
 }	// End of displayItems()
 
 
@@ -62,19 +64,13 @@ function quantityCheck(answer) {
 		let price = res[0].price;
 		let stockRemaining = res[0].stock_quantity;
 
-		console.log("price test");
-		console.log(idRequested);
-		console.log(quantityRequested);
-		console.log(price);
-		console.log(stockRemaining);
-
 		// If there are not enough items in stock
 		if (quantityRequested > stockRemaining) {
-			return console.log("Insufficient quantity!");
+			console.log("Unfortunately, we do not have that quantity of the item you wish to purchase in our stock.");
+			connection.end();
 		}
 
 		// Else call a function that updates the database
-
 		else {
 			updateQuantity(idRequested, quantityRequested, price, stockRemaining);
 		}
@@ -85,7 +81,7 @@ function quantityCheck(answer) {
 // Beginning of updateQuantity()
 function updateQuantity(idRequested, quantityRequested, price, stockRemaining) {
 	let newRemainingStock = stockRemaining - quantityRequested;
-	let totalCost = price * quantityRequested;
+	let totalCost = (price * quantityRequested).toFixed(2);
 	connection.query("UPDATE products SET ? WHERE ?",
 		[
 			{
@@ -99,7 +95,8 @@ function updateQuantity(idRequested, quantityRequested, price, stockRemaining) {
 			if (err) throw err;
 			// transaction complete!
 			console.log("Your total cost will come to be $" + totalCost);
-			console.log("Please pay in cash, credit, or souls.");
+			console.log("Thank you for shopping with Bamazon!");
+			connection.end();
 		}
 	)
 }	// End of updateQuantity()
