@@ -20,7 +20,6 @@ connection.connect(function (err) {
 
 // Beginning of displayItems()
 function displayItems() {
-
 	connection.query("SELECT * FROM products", function (err, results) {
 		if (err) throw err;
 		for (let i = 0; i < results.length; i++) {
@@ -29,7 +28,6 @@ function displayItems() {
 			console.log("Product description: " + results[i].product_description);
 			console.log("Product price: $" + results[i].price);
 		}
-
 		inquirer
 			.prompt([
 				// The first should ask them the ID of the product they
@@ -51,41 +49,43 @@ function displayItems() {
 				quantityCheck(answer);
 			})
 	}) // connection.query endpoint
-}
+}	// End of displayItems()
 
 
 // Beginning of quantityCheck()
 function quantityCheck(answer) {
-	connection.query("SELECT stock_quantity FROM products WHERE item_id=" + answer.askForId, function (err, res) {
+	connection.query("SELECT * FROM products WHERE item_id=" + answer.askForId, function (err, res) {
 		if (err) throw err;
 		// The below is the correct amount of stock remaining of the item.
 		let idRequested = answer.askForId;
 		let quantityRequested = answer.askForQuantity;
+		let price = res[0].price;
 		let stockRemaining = res[0].stock_quantity;
 
+		console.log("price test");
 		console.log(idRequested);
 		console.log(quantityRequested);
+		console.log(price);
 		console.log(stockRemaining);
 
-		// if there are not enough items in stock
-		// "Insufficient quantity!"
-
+		// If there are not enough items in stock
 		if (quantityRequested > stockRemaining) {
 			return console.log("Insufficient quantity!");
 		}
 
-		// else change the database's quantity (use SET and WHERE)
-		// once updated, show the total cost of the purchase
+		// Else call a function that updates the database
 
 		else {
-			updateQuantity(idRequested, quantityRequested, stockRemaining);
+			updateQuantity(idRequested, quantityRequested, price, stockRemaining);
 		}
 	});
 }	// End of quantityCheck()
 
 
-function updateQuantity(idRequested, quantityRequested, stockRemaining) {
+// Beginning of updateQuantity()
+function updateQuantity(idRequested, quantityRequested, price, stockRemaining) {
 	let newRemainingStock = stockRemaining - quantityRequested;
+	let totalCost = price * quantityRequested;
 	connection.query("UPDATE products SET ? WHERE ?",
 		[
 			{
@@ -95,38 +95,11 @@ function updateQuantity(idRequested, quantityRequested, stockRemaining) {
 				item_id: idRequested
 			}
 		],
-		function(err, response){
+		function (err, res) {
 			if (err) throw err;
 			// transaction complete!
-			console.log("Transaction complete!");
+			console.log("Your total cost will come to be $" + totalCost);
+			console.log("Please pay in cash, credit, or souls.");
 		}
 	)
-}
-
-
-
-
-// below is for reference
-										// function updateProduct() {
-										// 	console.log("Updating all Rocky Road quantities...\n");
-										// 	var query = connection.query(
-										// 		"UPDATE products SET ? WHERE ?",
-										// 		[
-										// 			{
-										// 				quantity: 100
-										// 			},
-										// 			{
-										// 				flavor: "Rocky Road"
-										// 			}
-										// 		],
-										// 		function (err, res) {
-										// 			console.log(res.affectedRows + " products updated!\n");
-										// 		}
-										// 	);
-										// 	// logs the actual query being run
-										// 	console.log(query.sql);
-										// }
-// above is for reference
-
-
-// insert functions to ask what to do from here (stock, price, etc)
+}	// End of updateQuantity()
